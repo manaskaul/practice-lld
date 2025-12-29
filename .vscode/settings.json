@@ -1,0 +1,9 @@
+{
+  "java.project.sourcePaths": [
+    "."
+  ],
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar"
+  ],
+  "java.jdt.ls.vmargs": "-javaagent:${workspaceFolder}/lib/lombok.jar"
+}
