@@ -1,0 +1,35 @@
+USE CASES (System Behavior)
+    Vehicle enters the parking lot
+    Vehicle gets the ticket
+    Vehicle parks in the designated spot (floor number and spot)
+    Vehicle gives back the ticket and pays
+    Vehicle leaves the parking lot
+
+ENTITIES
+    ParkingLot
+    Vehicle (Car/Truck/Bike)
+    TicketCounter
+    ParkingSpot
+    Floor
+    Ticket
+    PaymentCounter
+
+RESPONSIBLITIES
+    ParkingLot
+        for managing overall system of vehicle parking
+    Vehicle
+        the actual vehicle that will get parked
+    TicketCounter
+        the counter that issues the ticket to the vehicle that enters the lot
+        it assigns the floor number and the parking space where the vehicle can be parked
+    ParkingSpot
+        physical spot where the vehicle can be parked
+        1 parking spot can only have 1 vehicle parked in
+    Floor
+        physical floor (or floor number) where the vehicle can be parked
+        it will have multiple parking spots
+    Ticket
+        physical ticket containg the vehicle details and parking details
+        vehicle uses this to find and park their vehicle at the correct spot
+    PaymentCounter
+        the counter that accepts the payment and lets the vehicle exit

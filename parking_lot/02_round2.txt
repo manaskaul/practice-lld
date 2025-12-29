@@ -1,0 +1,148 @@
+USE CASES (System Behavior)
+    Vehicle enters the parking lot
+    Vehicle gets the ticket
+    Vehicle parks in the designated spot (floor number and spot)
+    Vehicle gives back the ticket and pays
+    Vehicle leaves the parking lot
+
+
+ENTITIES (Domin Objects)
+    ParkingLot
+    Floor
+    Spot
+    Ticket
+
+
+RESPONSIBLITIES
+    ParkingLot
+        for managing overall system of vehicle parking
+    Floor
+        physical floor (or floor number) where the vehicle can be parked
+        it will have multiple parking spots
+    Spot
+        physical spot where the vehicle can be parked
+        1 parking spot can only have 1 vehicle parked in
+    Ticket
+        physical ticket containg the vehicle details and parking details
+        vehicle uses this to find and park their vehicle at the correct spot
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+Vehicle enters the parking lot
+Someone checks if there is a valid available parking space
+    if No, the vehicle is notified
+    if Yes, ticket is issued to the vehicle
+An allocator with info about the available parking spaces, assigns one to the ticket
+The ticket contains the vehicle number, floor number, spot number, entry time
+A entry handler marks the spot occupied and lets the vehicle in
+
+When vehicle exits, it needs to pay
+    a price calculator gets the current time and calculates the parking fee
+    a payment collector collets the payment
+    an exit handler marks the spot vacant and lets the vehicle out
+
+
+
+Decisions:
+    Is there a parking spot available?
+        Required Info: total spots, free (unoccupied) spots
+    What floor/spot should vehicle park their car in?
+        Required Info: floor number, spot number, vehicle type
+    How much to charge the vehicle at their exit?
+        Required Info: entry time, exit time, pricing stratergy
+
+
+
+Decisions:
+    Can the current vehicle type be parked? Is there a free spot available for this vehicle type?
+        Required Info: 
+            vehicle type : Vehicle
+            total floors/spots : Floor/ParkingLot
+            unoccupied floor/spot for the vehicle type : Floor/ParkingLot
+        Ownership: ParkingLot
+    Which parking spot should be assigned to this type of vehicle
+        Required Info:
+            vehicle type: Vehicle
+            all floors/spots: Floor/ParkingLot
+            all available floors/spots for this vehicle type: Floor/ParkingLot
+        Ownership: ParkingLot
+    How much to charge the vehicle at their exit?
+        Required Info: 
+            entry time: Ticket
+            exit time: System Time
+            pricing rules: ParkingLot
+        Ownership: ParkingLot (can be later delegated to a pricing component)
+
+
+ENTITIES
+    ParkingLot
+        - Responsible for determining if vehicle can enter into the lot
+        - Responsible for assiging the parking floor and parking spot based on the vehicle type
+        - Responsible for calculating the fee when vehicle exits the lot
+    ParkingFloor
+        - Responsible for holding all the parking spots on that particular floor
+        - Responsible for holding the available parking spots, for a particular vehicle type
+    ParkingSpot
+        - Responsible for holding the type of vehicle that can be parked on the spot
+        - Responsible for holding if the spot is available/unavailable for parking a vehicle
+    Vehicle
+        - Responsible for holding the vehicle type, vehicle number
+    Ticket
+        - Responsible for holding the vehicle number, vehicle type, entry time, floor number, spot number
+
+
+ENTITIES
+    ParkingLot
+        - Determines wheather a vehicle can be parked or not (based on the vehicle type)
+        - Assigns appropriate spot for the vehicle (based on the vehicle type)
+        - Issues the ticker when a vehicle enters the lot
+        - Calculates the fee when the vehicle exits the lot
+    ParkingFloor
+        - Owns and manages all the parking spots on the floor
+        - Provides the vacant/available parking spots when queried
+    ParkingSpot
+        - Determine wheather it can accomodate a given vehicle type (bike vs truck)
+        - Tracks wheather the spot is available or not
+        - Holds reference to the currently parked vehicle
+    Vehicle
+        - Represents the vehicle entering the lot
+        - Tracks vehicle specific attributes - vehicle type, vehicle number
+    Ticket
+        - Represents parking session for the vehicle
+        - Stores entry time and assigned parking spot
+        - Stores vehicle details that is parked
+        - Triggers payment calculation when exiting the lot
+    
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+
+First pressure appears: 
+The pricing logic can change over time, grow complex based on the vehicle type, day of the week, etc
+
+Solution:
+Introduce PricingStratergy
+Use Stratergy Pattern to implement different types of stratergies
+    FlatPricingStratergy
+    DynamicPricingStratergy
+    SurgePricingStratergy
+
+
+Second pressure appears:
+The spot allocation can grow over time and become complex to handle multiple types of vehicles, shortest to exit, etc
+
+Solution
+The same concept can be used in spot allocation as well
+Introduce SpotAllocationStratergy
+Use stratergy pattern to implement the different types of stratergies
+    LowerFLoorFirstStratergy
+    VehicleTypeStratergy
+    NearestToExitStratergy
+    PriorityParkingStratergy
+
+for both these cases the decision of fee pricing and spot allocations stays with ParkingLot
+but the knowledge and computation is delegated to PricingStratergy and SpotAllocationStratergy
