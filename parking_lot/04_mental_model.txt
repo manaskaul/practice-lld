@@ -1,0 +1,212 @@
+Phase 1 : Top-Down for thinking.
+    You ask:
+        What decisions must be made?
+        Who must own them?
+        What data is needed?
+
+    No classes yet.
+    This is pure reasoning.
+
+Phase 2 : Bottom-Up for building.
+    Once ownership is clear:
+        You define entities
+        Add fields
+        Add method signatures
+
+    This is where your Java skeleton came in.
+    Bottom-up is implementation, not discovery.
+
+Phase 3 : Top-Down for explaining.
+    In interviews:
+        You present top-down
+        You explain evolution
+        You justify abstractions
+
+    Interviewers care far more about this than method details.
+
+
+
+
+How to approach the interview question -
+
+0. Ground Rules (before you start)
+    ❌ Don’t start with classes
+    ❌ Don’t start with patterns
+    ❌ Don’t start with UML
+    ❌ Don’t over-optimize early
+    
+    You are not building software.
+    You are demonstrating judgment.
+
+1. Clarify the Problem (30–60 seconds)
+    Ask just enough questions to fix scope.
+    What are the core flows?
+    What is explicitly out of scope?
+    Any constraints (scale, concurrency, etc.)?
+
+    “I’ll start with core functionality and evolve the design.”
+
+2. Think in Decisions (Top-Down)
+    Ask: What decisions must the system make?
+    Write 5–7 decisions:
+        Entry decisions
+        Allocation decisions
+        Exit decisions
+        State transition decisions
+
+    No entities yet.
+    No methods.
+    Only decisions.
+
+3. For Each Decision, List Required Information
+    For every decision, ask: What information is required to make this decision correctly?
+    This forces:
+        Data awareness
+        Constraint clarity
+        No guessing
+    
+    Still no entities.
+
+
+4. Assign Ownership (Conceptual First)
+    Now ask: Who must own this decision?
+    Rules:
+        Owner must have access to most required info
+        Owner must be accountable for the outcome
+        Ownership is conceptual, not code yet
+
+    You’ll say things like:
+        “The parking lot owns this”
+        “The elevator system owns this”
+        “An individual elevator owns this”
+
+    This is where design is decided.
+
+
+5. Let Entities Emerge (Not Be Invented)
+    Now — and only now — define entities.
+    Rule: An entity exists because it owns a decision or the data required for it.
+    
+    If an object:
+        Doesn’t own a decision
+        Doesn’t own essential data
+        → it probably shouldn’t exist yet.
+
+    This avoids:
+        God objects
+        UI leakage
+        Over-engineering
+
+
+6. Write Responsibilities (Behavioral, Not Passive)
+    For each entity: 1–3 responsibilities
+    
+    Each maps to:
+        A decision it owns, or
+        Data it must manage to support that decision
+    
+    Avoid:
+        “Manages system”
+        “Holds data”
+    
+    Prefer:
+        “Determines…”
+        “Assigns…”
+        “Calculates…”
+
+
+7. Start Simple (Keep Knowledge with Decision)
+
+    Initial rule: Keep decision and knowledge together.
+    Do NOT separate components yet.
+    This is intentional.
+
+    You earn abstractions through pain.
+
+
+8. Apply Pressure (Evolve Requirements)
+    Now introduce a realistic change:
+        Rules vary
+        Policies differ
+        Behavior becomes conditional
+
+    Ask: “Is this still core to the owner’s identity?”
+
+    This is where discomfort appears.
+
+
+9. Separate Knowledge, Not Ownership
+    When logic becomes:
+        Volatile
+        Replaceable
+        Complex
+    Then:
+        Ownership stays
+        Knowledge moves
+    You introduce:
+        PricingPolicy
+        AllocationStrategy
+        SchedulingPolicy
+
+    This is where patterns emerge naturally.
+
+
+10. Validate the Separation
+    Check: 
+        Does the owner still control flow?
+        Does the delegated component only compute?
+        Are dependencies minimal and explicit?
+
+    If yes — good design.
+
+
+11. Bottom-Up Only After Structure Is Clear
+    Now you can:
+        Define classes
+        Add fields
+        Add method signatures
+
+    This is construction, not design.
+
+
+12. Explain Top-Down (Always)
+    In interviews, always explain:
+        Core flow
+        Decision ownership
+        Evolution under change
+        Tradeoffs
+
+    Never start with class diagrams.
+
+
+The Direction of Thinking (burn this in)
+    Top-Down (discover)
+    ↓
+    Ownership & boundaries
+    ↓
+    Bottom-Up (fill details)
+    ↓
+    Top-Down (explain)
+
+
+The Core Mental Model
+    Low-level design is the process of identifying system decisions, assigning clear ownership, and introducing abstractions only when change forces them. 
+    Entities exist to hold responsibilities, not to mirror real-world nouns. 
+    Good design keeps ownership stable while allowing volatile knowledge to evolve independently.
+
+The Three Rules That Never Fail
+    Decisions before entities
+    Ownership before abstraction
+    Pressure before patterns
+    
+    Follow these and you won’t get stuck.
+
+
+How You Should Practice Going Forward
+    For every LLD problem:
+        Write decisions
+        Assign ownership
+        Derive entities
+        Evolve under change
+        Explain tradeoffs
+        Repeat.
