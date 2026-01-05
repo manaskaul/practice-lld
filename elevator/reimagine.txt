@@ -1,0 +1,49 @@
+Requirements :
+
+1. Building will have multiple floors
+2. Building will have multiple elevators (2 for starters)
+3. Elevator will serve all the floors 0 to N
+4. Elevator moves up/down and can stop on any floor
+5. Every floor will have a panel to call the elevator, with only 2 options - up or down to generate elevator request
+6. Every elevator will have option to enter the destination floor once person enters
+7. Elevator will have the knowledge of which floor it is on, which direction it is moving, and floors assigned to it
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+System Events:
+
+User clicks the elevator call button on the floor
+An elevator is assigned to the call floor
+The assigned elevator could be idle or one moving the call direction
+The elevator reaches the call floor
+User gets on the elevator and presses the destination floor in the cabin
+Elevator serve the floor one-by-one and moves to the floors in the direction
+After serving all the floors in one direction, elevator reverses the direction and service the other floors
+
+
+
+User-driven events (external)
+    User presses UP or DOWN button on a floor
+        A call request is generated
+    User presses a destination floor button inside an elevator
+        A destination floor request is generated
+
+System-driven events (state observations)
+    An elevator arrives at a floor
+    Elevator doors open
+    Elevator doors close
+    An elevator has no pending destination floors
+
+Time / progression events (completion of actions)
+    Elevator completes movement between two floors
+    Elevator finishes servicing a stop
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Decisions:
+
+What should system do with the call request?
+
+Which elevator should system assign to serve the call request?
+
+How should elevator order its destination floor 

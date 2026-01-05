@@ -1,0 +1,55 @@
+Elevator system is essentially 3 basic types of decisions:
+
+Request Decision
+    What does the button press mean?
+        - Hall Call Request (Floor + Direction)
+        - Elevator Floor Request (Floor)
+
+Scheduling Decision
+    Which elevator should handle the incoming request?
+        - Elevator Direction
+        - Current Floor
+        - Load
+        - Stratergy (Nearest, Scan, OddEven, etc)
+
+Movement Decision
+    How does the elevator move once assigned?
+        - Door Open/Close
+        - Move Up/Down
+        - Stop Logic
+        - State Transions
+    
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Func Requirements:
+    The system should allow users on a floor to request an elevator using UP or DOWN buttons.
+    The system should dispatch an elevator to pick up users requesting service on a floor.
+    Once inside an elevator, users should be able to select a destination floor.
+    The elevator should transport users to their selected destination floor.
+    The system should support multiple elevators operating concurrently.
+    The system should ensure elevators stop at requested floors to pick up or drop off users.
+    The system should continue operating correctly as requests arrive concurrently.
+
+Non Func Requirements:
+    An elevator must not skip a requested stop once it has accepted it.
+    Direction and movement state must remain consistent.
+    The system should respond promptly to hall and car button presses.
+    Assignment of an elevator to a hall request should happen within a bounded time.
+    No floor or request should be starved indefinitely.
+    Repeated requests from one area should not permanently block others.
+    The system should support increasing number of elevators and floors without redesign.
+    Scheduling logic should not degrade sharply as elevators increase.
+    New scheduling strategies should be pluggable without modifying elevator movement logic.
+
+Events :
+    User presses the call button
+        What to do with this request?
+        Which elevator to assign this request?
+        Where in the queue would this request go?
+    Elevator arrives at the floor
+        Should the elevator stop
+        Which direction should the elevator move next
+    User selects the floor after getting on the elevator
+        How to handle this request?
+        Where in the queue would this request go?
+        

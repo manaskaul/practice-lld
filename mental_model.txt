@@ -210,3 +210,17 @@ How You Should Practice Going Forward
         Evolve under change
         Explain tradeoffs
         Repeat.
+
+
+
+
+
+
+
+1. Clarify requirements
+2. List external events
+3. Ask how the system behaves over time
+4. Identify where behavior can branch
+5. These branching points are your decisions
+6. Assign ownership
+7. Let entities emerge

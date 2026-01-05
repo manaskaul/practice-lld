@@ -1,0 +1,181 @@
+Requirements :
+
+1. Building will have multiple floors
+2. Building will have multiple elevators (2 for starters)
+3. Elevator will serve all the floors 0 to N
+4. Elevator moves up/down and can stop on any floor
+5. Every floor will have a panel to call the elevator, with only 2 options - up or down to generate elevator request
+6. Every elevator will have option to enter the destination floor once person enters
+7. Elevator will have the knowledge of which floor it is on, which direction it is moving, and floors assigned to it
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DECISIONS :
+
+User calls the direction they want to go to, UP or DOWN
+    Required Info:
+        Call Direction (UP or DOWN)
+    Ownership:
+        This is a external request and not part of the system
+
+Elevator receives the call direction and decides which elevator should serve the request
+    Required Info:
+        Call Direction : Direction the user wants to go to
+        Floor Number : Current floor where is request is being made
+        Elevator State: which elevator is in what floor and moving in what direction (UP/DOWN/IDLE)
+    Ownership:
+        ElevatorSystem (or ElevatorManager)
+
+User enters the elevator and presses the floor number that they want to go to. Elevator registers the request and moves to that floor
+    Required Info:
+        Current Floor Number
+        Destination Floor Number
+    Ownership:
+        Elevator
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DECISIONS :
+
+System recieves the call direction request
+    Required Info:
+        Call Direction (UP/DOWN)
+    Ownership:
+        ElevatorManager
+
+System decides the elevator to serve the request. Picks the one which is idle or one which is moving in the same direction
+    Required Info:
+        Call Direction : UP/DOWN
+        Current Elevator State for all elevators : MOVING_UP/MOVING_DOWN/IDLE
+    Ownership:
+        ElevatorManager (decision) and ElevatorMovementStratergy (knowledge)
+
+Elevator moves to the call floor
+    Required Info:
+        Current Floor
+        Call Floor
+    Ownership
+        Elevator
+
+System recieves the destination floor it has to go to
+    Required Info:
+        Current Floor
+        Current Moving Direction
+        Destination Floor
+    Ownership:
+        Elevator
+
+Elevator moves to the destination floor, if multiple selected, it moves to all of them one-by-one in a queue fasion
+    Required Info:
+        Current Floor
+        Selected Floor
+    Ownership:
+        Elevator
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DECISIONS:
+
+What happens when a call button is pressed?
+    Required Info:
+        Current Floor : 0 to N
+        Call Direction : UP/DOWN
+    Ownership:
+        ElevatorManager (owner)
+
+What happens when a cabin button is pressed (inside the elevator)?
+    Required Info:
+        Current Floor : O to N
+        Destination Floor (or List of Destination Floors) : 0 to N
+    Ownership
+        Elevator (owner)
+
+Who decides which elevator should serve a call request?
+    Required Info:
+        Current Floor : 0 to N
+        All Elevator Moving Direction : Map of elevator number/id and moving direction (MOVING_UP/MOVING_DOWN/IDLE)
+    Ownership
+        ElevatorMovementStratergy (knowledge) & ElevatorManager (owner)
+
+Who decides how the elevator should serve the floors, in what order, in what direction?
+    Required Info:
+        Current Floor : O to N
+        Destination Floor (or List of Destination Floors) : 0 to N
+        Moving Direction : MOVING_UP/MOVING_DOWN/IDLE
+    Ownership:
+        FloorServingStratergy (knowledge) & Elevator (owner)
+
+What happens once the elevator reaches one of the destination floors?
+    Required Info:
+        Current Floor : 0 to N
+    Ownership:
+        Elevator
+
+When does the elevator stop moving or change direction?
+    Required Info:
+        Destination Floors to serve : List<Floor>
+    Ownership:
+        Elevator
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+DECISIONS:
+
+What should system do with the Hall Request (Call button press on a floor UP/DOWN)?
+    Required Info:
+        Current Floor
+        Call Direction
+        Current Elevator State (Busy/Idle)
+        Existing Pending Hall Request
+    Ownership:
+        ElevatorManager
+            This decides what to do with the request - assign immediately, add in pending queue, merge in existing request
+
+Which elevator should be assigned to the hall request?
+    Required Info:
+        Call Floor
+        Call Direction
+        All Elevator State
+            Current Floor
+            Moving Direction
+            List of Destination Floors (Pending Stops)
+    Ownership:
+        ElevatorManager (owner)
+        ElevatorAssignmentStratergy (knowledge)
+    This is purely selection logic
+
+How should an elevator order its Destination Floors (Pending Stops)
+    Required Info:
+        Current Floor
+        Elevator Moving Direction
+        List of Destination Floors (Pending Stops)
+    Ownership:
+        Elevator (owner)
+        FloorServingStratergy (knowledge)
+    This determines order, implicit elevator movement direction, when reveral happens
+
+What is the elevator's next stop floor now?
+    Required Info:
+        Current Floor
+        List of Destination Floors (Pending Stops)
+    Ownership:
+        Elevator
+    This is the time-progression decision
+
+How should the cabin request be integrated (Buttion press inside the elevator)?
+    Required Info:
+        Destination Floor
+        List of Destination Floors (Pending Stops)
+        Current Direction
+    Ownership:
+        Elevator
+    Cabin requests never go back to the system. They are handled by the elevator (local) level itself
+
+What happens when an elevator becomes idle?
+    Required Info:
+        Pending Unassigned Hall requests
+        All Elevators current floors
+        All Elevators moving direction
+    Ownership:
+        ElevatorManager
