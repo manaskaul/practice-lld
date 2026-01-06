@@ -6,6 +6,7 @@ import elevator.enums.Direction;
 import elevator.interfaces.ElevatorScheduler;
 
 public class ElevatorManager {
+    
     private Map<Integer, Elevator> elevators = new HashMap<>();
     private ElevatorScheduler scheduler;
 
@@ -17,14 +18,14 @@ public class ElevatorManager {
         elevators.put(elevator.getId(), elevator);
     }
 
-    public void acceptFloorCallRequest(int floor, Direction direction) {
+    public void acceptFloorCallRequest(int callFloor, Direction callDirection) {
 
         List<Elevator> elevatorsList = new ArrayList<>(elevators.values());
 
-        int elevatorId = scheduler.scheduleElevatorOnFloorCallRequest(floor, direction, elevatorsList);
+        int elevatorId = scheduler.scheduleElevatorOnFloorCallRequest(callFloor, callDirection, elevatorsList);
 
         Elevator selectedElevator = elevators.get(elevatorId);
         
-        selectedElevator.processElevatorCallRequest(floor);
+        selectedElevator.addPickupStop(callFloor, callDirection);
     }
 }

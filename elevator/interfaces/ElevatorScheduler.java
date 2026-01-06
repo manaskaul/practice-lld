@@ -7,6 +7,6 @@ import elevator.enums.Direction;
 
 public interface ElevatorScheduler {
     
-    public int scheduleElevatorOnFloorCallRequest(int floor, Direction direction, List<Elevator> elevators);
+    public int scheduleElevatorOnFloorCallRequest(int callFloor, Direction callDirection, List<Elevator> elevators);
     
 }
