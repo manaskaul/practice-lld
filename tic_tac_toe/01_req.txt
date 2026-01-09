@@ -1,0 +1,68 @@
+Functional Requirements:
+
+System should start a new game with an empty 3x3 board (9 squares)
+System should allow two player game
+System should allow players to play turn-by-turn
+System should assign the players with two symbols - O or X
+System should allow players to make a move only on their turn
+A valid move should be allowed only on an empty cell
+After each move system should check if the player has won
+System should detect win if the player has 3 symbols (o's or X's) in a row - horizontally/vertically/diagonally
+System should detect draw, if there are no empty square left to be played and no player has won
+Once the game ends, system should reject further moves unless to start a new game
+
+Non Functional Requirements:
+
+System should always correctly identify player win or draw
+System should be extensible to make the game board NxN
+System should be extensible to allow Player vs Computer
+
+
+
+Decisions:
+
+What happens when a new game is started?
+    Game
+Who decides what player will go next?
+    Game
+Who assigns the players their symbols?
+    Game
+Who decides if the move is valid?
+    Game (Not Board because the game owns the rules and board owns the state)
+    using Board state
+Who decides which player has won?
+    Game (Not Board because the game owns the rules and board owns the state)
+    using Board state
+Who decides if the game is draw?
+    Game (Not Board because the game owns the rules and board owns the state)
+    using Board state
+
+
+
+Entities:
+
+Game
+    - Enforces rules of the game
+    - Handles player move order, move validity
+    - Applies moves to the board
+    - Assigns symbols to both Players on game start
+Board
+    - Maintains the grid state of the game
+    - Places symbols at position
+    - Answers: isCellEmpty,isBoardFull,placeSymbolAtCell
+Player
+    - Player proposes a move using its MoveStrategy
+
+GameManager 
+    - Not needed because the Game handles everything
+    - There aren't multiple games to manager, just the one
+    - Simple lifecycle - Start -> Play -> End
+MoveStratergy
+    - Decides how the move is chosen
+    - Helps in making the playing extensible: Player vs Player / Player vs Computer / Player vs AI
+    - Returns proposed move
+
+WinStratergy
+    - Helps in making the board dynamic extensible
+    - Can truly make board NxN with custom winning rules
+    - Contains win condition logic
