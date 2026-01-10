@@ -1,0 +1,23 @@
+package lld_00_patterns.observer.pull.classes;
+
+import lld_00_patterns.observer.pull.interfaces.NewsFeedView;
+import lld_00_patterns.observer.pull.interfaces.ObserverInterface;
+
+/**
+ * Concrete Observer (PULL model).
+ * Receives a subject/view reference and pulls the needed data via getters.
+ *
+ * Why NewsFeedView and not NewsAgency?
+ * - This keeps the observer decoupled from the concrete subject class.
+ * - The observer only depends on the minimal, read-only API it needs.
+ * - Any subject that implements NewsFeedView can be plugged in.
+ */
+public class MobileDisplayObserver implements ObserverInterface<NewsFeedView> {
+
+    @Override
+    public void update(NewsFeedView feed) {
+        // Pull the data we need from the subject (read-only view)
+        System.out.println("Mobile display: " + feed.getLatestHeadline());
+    }
+
+}
