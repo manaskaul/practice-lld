@@ -1,0 +1,205 @@
+Requirements -
+
+User can search for a Loaction they are in to find cars
+User can search for the car they are intreseted in
+System should be able to handle different types of Vehicles
+System should charge the User based on the vehivle type and rental period
+System should generate the invoice after the User has selected the vehicle and rental period
+User pays the charge when the vehicle is rented
+
+
+Functional Requirements -
+
+System should allow users to search for available vehicles based on store location (branch)
+System should allow users to filter vehicle by type (sedan/suv)
+System should allow users to specify the rental period (interval of 1hr - start & end time)
+System should show only vehicles that are available for the selected location and rental time range.
+System should allow user to reserve the available vehicle for the selected time range
+System should calculate the rental charge based on the vehicle type and the rental period
+System should generate invoice and allow user to pay at the time of booking
+System should allow vehicle pickup and return, hence updating the vehicle availability accordingly
+
+Optional (won't do):
+System should allow user to pay at the time of return
+System should allow user to cancel before pickup
+
+
+
+
+Entities -
+
+GlobalStore
+    Map<Location,<List<Vehicle>> vehicleStore
+CarRental
+    List<Vehicle> allVehicles
+    getAllVehiclesForLocation()
+    isVehicleAvailableForRentInTimeRange(Vehicle vehicle, TimeWindow window)
+    reserveVehicle(Vehicle vehicle, TimeWindow window)
+    pickupVehicle(Vehicle vehicle, TimeWindow window)
+    returnVehicle(Vehicle vehicle)
+Store (Location)
+    int id
+    String location
+Vehicle
+    int vehicleNumber
+    VehicleType vehicleType
+    VehicleState vehicleState
+VehicleType
+    HATCHBACK, SEDAN, SUV
+VehicleState
+    ACTIVE, IN_USE
+ReservationStatus
+    AVAILABLE, RESERVED, PICKED_UP
+TimeWindow
+    startTime
+    endTime
+VehicleSearchEngine
+    List<Vehicle> getAllVehiclesForLocation(Location location)
+VehicleAvailabilityManager
+    List<Vehicle> getAllAvailableVehicleForLocationAndTime(Location location, TimeWindow window)
+    void updateVehicleAvaliabilty(Vehicle vehicle, TimeWindow window)
+FeeCalculator
+    double calculateRentalFee(Vehicle vehicle, TimeWindow window)
+Invoice
+    Vehicle vehicle
+    TimeWindow window
+    double rentalCharge
+PaymentManager
+    processPayment(Invoice invoice)
+
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+
+
+Functional Requirements -
+
+System should allow users to search for available vehicles based on store location (branch)
+System should allow users to filter vehicle by type (sedan/suv)
+System should allow users to specify the rental period (interval of 1hr - start & end time)
+System should show only vehicles that are available for the selected location and rental time range.
+System should allow user to reserve the available vehicle for the selected time range
+System should calculate the rental charge based on the vehicle type and the rental period
+System should generate invoice and allow user to pay at the time of booking
+System should allow vehicle pickup and return, hence updating the vehicle availability accordingly
+
+Optional (won't do):
+System should allow user to pay at the time of return
+System should allow user to cancel before pickup
+
+
+Entities -
+
+Store
+    id
+    List<Vehicle> vehicles
+    Map<Vehicle, List<TimeWindow>> vehicleAvailability
+    storeName
+    location
+    getAllVehicles()
+    getAllVehicleAvailableInTimeWindow(VehicleType, TimeWindow)
+    pickupVehicle(Vehicle, TimeWindow)
+    returnVehicle(Vehicle)
+Vehicle
+    vehicleNumber
+    vehicleType : SUV, SEDAN, HATCHBACK
+    reservationStatus : AVAILABLE, UNAVAILABLE
+TimeWindow
+    startTime
+    endTime
+ReservationManager
+    Invoice
+    RentCalculationStratergy
+    reserveVehicle(Vehicle, TimeWindow)
+    returnVehicle(Vehicle)
+Invoice
+    Vehicle
+    TimePeriod
+RentCalculationStratergy
+    FlatRateRentCalculation
+    HourlyRateRentCalculation
+PaymentManager
+    processPayment(Invoice invoice)
+
+
+
+
+
+
+
+Reservation
+    reservationId
+    Store
+    Vehicle
+    TimeWindow
+    ReservationStatus : CREATED, PAID, PICKED_UP, RETURNED
+    * STATE :
+        CREATED -> PAID -> PICKED_UP -> RETURNED
+        CREATED -> CANCELLED (cancellation or no show)
+        CREATED -> PAID -> CANCELLED (cancellation and refund)
+ReservationService
+    List<Reservation> reservations
+    Reservation createNewReservation(Store, Vehicle, TimeWindow)
+    pickupVehicle(Reservation)
+    returnVehicle(Reservation)
+AvailabilityService
+    boolean isVehicleAvailableInTimeWindow(Vehicle, TimeWindow)
+    List<Vehicle> getAllAvailableVehicles(Store, VehicleType, TimeWindow)
+Vehicle
+    vehicleNumber
+    vehicleType : SUV, SEDAN, HATCHBACK
+    vehicleStatus : AVAILABLE, IN_USE, MAINTENANCE
+Store
+    id
+    name
+    location
+    List<Vehicle>
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+
+Entities -
+
+Store
+    id
+    name
+    location
+    List<Vehicle>
+    Lsit<Vehicle> getAllVehicles()
+Vehicle
+    vehicleNumber
+    vehicleType : SUV, SEDAN, HATCHBACK
+    vehicleStatus : AVAILABLE, IN_USE, MAINTENANCE
+TimeWindow
+    startTime
+    endTime
+Reservation
+    reservationId
+    Store
+    Vehicle
+    TimeWindow
+    ReservationStatus : CREATED, PAID, PICKED_UP, RETURNED
+    STATES :
+        CREATED -> PAID -> PICKED_UP -> RETURNED
+        CREATED -> CANCELLED (cancellation or no show)
+        CREATED -> PAID -> CANCELLED (cancellation and refund)
+ReservationService
+    List<Reservation> reservations
+    Reservation createNewReservation(Store, Vehicle, TimeWindow)
+    pickupVehicle(Reservation)
+    returnVehicle(Reservation)
+AvailabilityService
+    boolean isVehicleAvailableInTimeWindow(Vehicle, TimeWindow)
+    List<Vehicle> getAllAvailableVehicles(Store, VehicleType, TimeWindow)
+Invoice
+    Vehicle
+    TimePeriod
+RentCalculationStratergy
+    FlatRateRentCalculation
+    HourlyRateRentCalculation
+PaymentManager
+    boolean processPayment(Invoice invoice)
